@@ -13,10 +13,6 @@ type IRCBot struct {
     Messages chan interface{}
 }
 
-func (bot *IRCBot) GetEventsChannel() chan interface{} {
-    return bot.Messages
-}
-
 func NewIRCBot(nick string, server string, port int, useSSL bool) emirc.IRCBot {
     bot := new(IRCBot)
     cfg := irc.NewConfig(nick)
@@ -35,6 +31,10 @@ func NewIRCBot(nick string, server string, port int, useSSL bool) emirc.IRCBot {
     bot.initCallbacks()
 
     return bot
+}
+
+func (bot *IRCBot) GetEventsChannel() chan interface{} {
+    return bot.Messages
 }
 
 func (bot *IRCBot) initCallbacks() {
