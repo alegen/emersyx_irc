@@ -15,6 +15,8 @@ type IRCBot struct {
 
 func NewIRCBot(nick string, server string, port int, useSSL bool) emirc.IRCBot {
     bot := new(IRCBot)
+    bot.Messages = make(chan interface{})
+
     cfg := irc.NewConfig(nick)
 	cfg.Me.Ident = "emersyx"
 	cfg.Me.Name = "emersyx"
