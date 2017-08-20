@@ -1,8 +1,4 @@
-package main
-
-import(
-    irc "github.com/fluffle/goirc/client"
-)
+package emirc
 
 const(
     PRIVMSG = "PRIVMSG"
@@ -25,18 +21,6 @@ func NewMessage(raw, command, origin string, parameters []string) *Message {
     m.Origin = origin
     m.Parameters = make([]string, len(parameters))
     copy(m.Parameters, parameters)
-
-    return m
-}
-
-func newMessage(line *irc.Line) *Message {
-    m := new(Message)
-
-    m.Raw = line.Raw
-    m.Command = line.Cmd
-    m.Origin = line.Nick
-    m.Parameters = make([]string, len(line.Args))
-    copy(m.Parameters, line.Args)
 
     return m
 }

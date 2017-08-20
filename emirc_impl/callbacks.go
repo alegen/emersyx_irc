@@ -1,16 +1,27 @@
 package main
 
 import(
+    "emersyx.net/emersyx_irc/emirc"
     irc "github.com/fluffle/goirc/client"
 )
 
-func messageToChannel(bot *IRCBot, m *Message) {
-    bot.Messages <- m
+func newMessage(line *irc.Line) *emirc.Message {
+    m := new(emirc.Message)
+
+    m.Raw = line.Raw
+    m.Command = line.Cmd
+    m.Origin = line.Nick
+    m.Parameters = make([]string, len(line.Args))
+    copy(m.Parameters, line.Args)
+
+    return m
 }
 
 func makeSendToChannelCallback(bot *IRCBot) func(*irc.Conn, *irc.Line) {
     return func(conn *irc.Conn, line *irc.Line) {
-        go messageToChannel(bot, newMessage(line))
+        go func(){
+            bot.Messages <- newMessage(line)
+        }()
     }
 }
 
