@@ -2,21 +2,22 @@
 
 IRC receptor and resource for emersyx.
 
-## Usage
+## Build
 
-### Plugin implementation
-
-Source files in `emirc_impl` provide the implementation of the go plugin. They have to be built using the command:
+Source files in `emirc` provide the implementation of the go plugin. They have to be built using the command:
 
 ```
-go build -buildmode=plugin -o emersyx_irc.so emirc_impl/*
+go build -buildmode=plugin -o emirc.so emirc/*
 ```
 
-### Plugin interface
+The resulting `emirc.so` file can then be used by emersyx core.
 
-Source files in `emirc` provide the interface to go plugin. This package has to be imported into projects which use the
-plugin. The function which must be used to create new `IRCBot` instances (which implement the `emirc.IRCBot` interface)
-is:
+## Notes
+
+The `IRCBot` struct follows the APIs defined in the [emersyx_apis][1] repository, specifically those from the
+[emircapi][2] folder.
+
+The function which must be used to create new `IRCBot` instances is:
 
 ```
 func NewIRCBot(nick string, server string, port int, useSSL bool) emirc.IRCBot
@@ -24,6 +25,8 @@ func NewIRCBot(nick string, server string, port int, useSSL bool) emirc.IRCBot
 
 ## Credits
 
-The underlying implementation is provided by [fluffle/goirc][1].
+The underlying implementation is provided by [fluffle/goirc][2].
 
-[1]: https://github.com/fluffle/goirc
+[1]: https://github.com/emersyx/emersyx_apis
+[2]: https://github.com/emersyx/emersyx_apis/tree/master/emircapi
+[2]: https://github.com/fluffle/goirc
