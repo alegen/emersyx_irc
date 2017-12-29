@@ -14,7 +14,7 @@ type IRCBot struct {
 }
 
 // This function creates a new emircapi.IRCBot instance and applies to configuration specified in the arguments.
-func NewIRCBot(options ...func (emircapi.IRCBot) error) (*IRCBot, error) {
+func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error) {
     bot := new(IRCBot)
     bot.Messages = make(chan emircapi.Message)
 

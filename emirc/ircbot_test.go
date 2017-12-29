@@ -16,8 +16,17 @@ func TestConnection(t *testing.T) {
     if testing.Short() {
         fmt.Println("TestConnection not executed with -short argument")
     } else {
-        bot := NewIRCBot(*nick, "chat.freenode.net", 6697, true)
-        err := bot.Connect()
+        opt := NewIRCOptions()
+
+        bot, err := NewIRCBot(
+            opt.Nick(*nick),
+            opt.Server("chat.freenode.net", 6697, true),
+        )
+        if err != nil {
+            fmt.Println(err)
+        }
+
+        err = bot.Connect()
         if err != nil {
             fmt.Println(err)
         } else {

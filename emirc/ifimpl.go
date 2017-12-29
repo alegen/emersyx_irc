@@ -8,12 +8,6 @@ import(
 // This file contains implementations of methods that are mandatory for the emirc.IRCBot struct to implement the
 // emircapi.IRCBot and emcomapi.Receptor interfaces.
 
-// This method returns an IRCOptionsGenerator which implement the methods to configure an IRCBot instance.
-func (bot *IRCBot) GetOptionsGenerator() emircapi.IRCOptionsGenerator {
-    var optgen IRCOptionsGenerator
-    return optgen
-}
-
 // This method starts the connection process to the selected IRC server. This is a blocking method. When the method
 // returns, the IRCBot instance is connected to the IRC server if the return value is nil. Otherwise, an error occured.
 func (bot *IRCBot) Connect() error {

@@ -8,12 +8,12 @@ import(
     "emersyx.net/emersyx_apis/emircapi"
 )
 
-// This struct implements the emircapi.IRCOptionsGenerator interface. It generates configuration functions for the
-// emircapi.IRCBot implementation.
-type IRCOptionsGenerator struct {
+// This struct implements the emircapi.IRCOptions interface. Each method returns a function, which applies a specific
+// configuration to an IRCBot object.
+type IRCOptions struct {
 }
 
-func (g IRCOptionsGenerator) Nick(nick string) func(emircapi.IRCBot) error {
+func (o IRCOptions) Nick(nick string) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         if len(nick) == 0 {
             return errors.New("Nick cannot have zero length.")
@@ -27,7 +27,7 @@ func (g IRCOptionsGenerator) Nick(nick string) func(emircapi.IRCBot) error {
     }
 }
 
-func (g IRCOptionsGenerator) Ident(ident string) func(emircapi.IRCBot) error {
+func (o IRCOptions) Ident(ident string) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         if len(ident) == 0 {
             return errors.New("Ident cannot have zero length.")
@@ -41,7 +41,7 @@ func (g IRCOptionsGenerator) Ident(ident string) func(emircapi.IRCBot) error {
     }
 }
 
-func (g IRCOptionsGenerator) Name(name string) func(emircapi.IRCBot) error {
+func (o IRCOptions) Name(name string) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         if len(name) == 0 {
             return errors.New("Name cannot have zero length.")
@@ -55,7 +55,7 @@ func (g IRCOptionsGenerator) Name(name string) func(emircapi.IRCBot) error {
     }
 }
 
-func (g IRCOptionsGenerator) Version(version string) func(emircapi.IRCBot) error {
+func (o IRCOptions) Version(version string) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         cbot, ok := bot.(*IRCBot)
         if ok == false {
@@ -66,7 +66,7 @@ func (g IRCOptionsGenerator) Version(version string) func(emircapi.IRCBot) error
     }
 }
 
-func (g IRCOptionsGenerator) Server(address string, port uint, useSSL bool) func(emircapi.IRCBot) error {
+func (o IRCOptions) Server(address string, port uint, useSSL bool) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         if len(address) == 0 {
             return errors.New("Address cannot have zero length.")
@@ -87,7 +87,7 @@ func (g IRCOptionsGenerator) Server(address string, port uint, useSSL bool) func
     }
 }
 
-func (g IRCOptionsGenerator) UseSSL(useSSL bool) func(emircapi.IRCBot) error {
+func (o IRCOptions) UseSSL(useSSL bool) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         cbot, ok := bot.(*IRCBot)
         if ok == false {
@@ -98,7 +98,7 @@ func (g IRCOptionsGenerator) UseSSL(useSSL bool) func(emircapi.IRCBot) error {
     }
 }
 
-func (g IRCOptionsGenerator) QuitMessage(message string) func(emircapi.IRCBot) error {
+func (o IRCOptions) QuitMessage(message string) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         cbot, ok := bot.(*IRCBot)
         if ok == false {
@@ -107,4 +107,8 @@ func (g IRCOptionsGenerator) QuitMessage(message string) func(emircapi.IRCBot) e
 	    cbot.cfg.QuitMessage = message;
         return nil
     }
+}
+
+func NewIRCOptions() emircapi.IRCOptions {
+    return new(IRCOptions)
 }
