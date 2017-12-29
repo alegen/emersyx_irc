@@ -1,12 +1,12 @@
 package main
 
 import(
-    "emersyx.net/emersyx_irc/emirc"
+    "emersyx.net/emersyx_apis/emircapi"
     irc "github.com/fluffle/goirc/client"
 )
 
-func newMessage(line *irc.Line) *emirc.Message {
-    m := new(emirc.Message)
+func newMessage(line *irc.Line) emircapi.Message {
+    var m emircapi.Message
 
     m.Raw = line.Raw
     m.Command = line.Cmd
