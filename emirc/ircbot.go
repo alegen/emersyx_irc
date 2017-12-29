@@ -1,8 +1,6 @@
 package main
 
 import(
-    "strconv"
-    "crypto/tls"
     "emersyx.net/emersyx_apis/emircapi"
     irc "github.com/fluffle/goirc/client"
 )
@@ -11,30 +9,45 @@ import(
 // emircapi.IRCBot and emcomapi.Receptor interfaces.
 type IRCBot struct {
     api *irc.Conn
+    cfg *irc.Config
     Messages chan emircapi.Message
 }
 
 // This function creates a new emircapi.IRCBot instance and applies to configuration specified in the arguments.
-func NewIRCBot(nick string, server string, port int, useSSL bool) emircapi.IRCBot {
+func NewIRCBot(options ...func (emircapi.IRCBot) error) (*IRCBot, error) {
     bot := new(IRCBot)
     bot.Messages = make(chan emircapi.Message)
 
-    cfg := irc.NewConfig(nick)
-	cfg.Me.Ident = "emersyx"
-	cfg.Me.Name = "emersyx"
-	cfg.QuitMessage = "buh`bye"
-    cfg.SSL = useSSL
-    cfg.Server = server + ":" + strconv.Itoa(port)
-    cfg.NewNick = func(n string) string { return n + "^" }
+    // create a Config object for the underlying library
+    bot.cfg = irc.NewConfig("placeholder")
 
-    if useSSL {
-        cfg.SSLConfig = &tls.Config{ ServerName: server }
+    // override several default values from the underlying library
+	bot.cfg.Me.Ident = "emersyx"
+	bot.cfg.Me.Name = "emersyx"
+    bot.cfg.Version = "emersyx"
+    bot.cfg.SSL = true
+	bot.cfg.QuitMessage = "bye"
+
+    // standard function for generating new nicks
+    bot.cfg.NewNick = func(n string) string { return n + "^" }
+
+    // apply the configuration options received as arguments
+    // this configuration method is inspired from
+    // https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis
+    for _, option := range options {
+        err := option(bot)
+        if err != nil {
+            return nil, err
+        }
     }
 
-    bot.api = irc.Client(cfg)
+    // create the underlying Conn object
+    bot.api = irc.Client(bot.cfg)
+
+    // initialize callbacks
     bot.initCallbacks()
 
-    return bot
+    return bot, nil
 }
 
 func (bot *IRCBot) initCallbacks() {
