@@ -2,7 +2,7 @@ package main
 
 import(
     "errors"
-    "emersyx.net/emersyx_apis/emircapi"
+    "emersyx.net/emersyx_apis/emcomapi"
 )
 
 // This file contains implementations of methods that are mandatory for the emirc.IRCBot struct to implement the
@@ -50,7 +50,12 @@ func (bot *IRCBot) Privmsg(to, msg string) error {
     }
 }
 
+// This method returns the identifier field of the IRCBot struct.
+func (bot *IRCBot) GetIdentifier() string {
+    return bot.identifier;
+}
+
 // This method returns the Messages field of the IRCBot struct.
-func (bot *IRCBot) GetEventsChannel() chan emircapi.Message {
+func (bot *IRCBot) GetEventsChannel() chan emcomapi.Event {
     return bot.Messages;
 }
