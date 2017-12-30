@@ -13,6 +13,20 @@ import(
 type IRCOptions struct {
 }
 
+func (o IRCOptions) Identifier(id string) func(emircapi.IRCBot) error {
+    return func(bot emircapi.IRCBot) error {
+        if len(id) == 0 {
+            return errors.New("Identifier cannot have zero length.")
+        }
+        cbot, ok := bot.(*IRCBot)
+        if ok == false {
+            return errors.New("Unsupported IRCBot implementation")
+        }
+	    cbot.identifier = id
+        return nil
+    }
+}
+
 func (o IRCOptions) Nick(nick string) func(emircapi.IRCBot) error {
     return func(bot emircapi.IRCBot) error {
         if len(nick) == 0 {
