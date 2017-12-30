@@ -1,6 +1,8 @@
 package main
 
 import(
+    "errors"
+    "emersyx.net/emersyx_apis/emcomapi"
     "emersyx.net/emersyx_apis/emircapi"
     irc "github.com/fluffle/goirc/client"
 )
@@ -10,13 +12,16 @@ import(
 type IRCBot struct {
     api *irc.Conn
     cfg *irc.Config
-    Messages chan emircapi.Message
+    identifier string
+    Messages chan emcomapi.Event
 }
 
 // This function creates a new emircapi.IRCBot instance and applies to configuration specified in the arguments.
 func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error) {
     bot := new(IRCBot)
-    bot.Messages = make(chan emircapi.Message)
+
+    // create the Messages channel
+    bot.Messages = make(chan emcomapi.Event)
 
     // create a Config object for the underlying library
     bot.cfg = irc.NewConfig("placeholder")
@@ -25,7 +30,7 @@ func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error)
 	bot.cfg.Me.Ident = "emersyx"
 	bot.cfg.Me.Name = "emersyx"
     bot.cfg.Version = "emersyx"
-    bot.cfg.SSL = true
+    bot.cfg.SSL = false
 	bot.cfg.QuitMessage = "bye"
 
     // standard function for generating new nicks
@@ -41,6 +46,11 @@ func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error)
         }
     }
 
+    // check if the mandatory identifier value has been set
+    if len(bot.identifier) == 0 {
+        return nil, errors.New("Identifier option has not been set.")
+    }
+
     // create the underlying Conn object
     bot.api = irc.Client(bot.cfg)
 
@@ -51,8 +61,8 @@ func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error)
 }
 
 func (bot *IRCBot) initCallbacks() {
-    bot.api.HandleFunc(irc.PRIVMSG, makeSendToChannelCallback(bot)  )
-    bot.api.HandleFunc(irc.JOIN,    makeSendToChannelCallback(bot)  )
-    bot.api.HandleFunc(irc.QUIT,    makeSendToChannelCallback(bot)  )
-    bot.api.HandleFunc(irc.PART,    makeSendToChannelCallback(bot)  )
+    bot.api.HandleFunc( irc.PRIVMSG, channelCallback(bot) )
+    bot.api.HandleFunc( irc.JOIN,    channelCallback(bot) )
+    bot.api.HandleFunc( irc.QUIT,    channelCallback(bot) )
+    bot.api.HandleFunc( irc.PART,    channelCallback(bot) )
 }
