@@ -2,12 +2,14 @@ package main
 
 import(
     "emersyx.net/emersyx_apis/emircapi"
+    "log"
     irc "github.com/fluffle/goirc/client"
 )
 
-func newMessage(line *irc.Line) emircapi.Message {
+func newMessage(id string, line *irc.Line) emircapi.Message {
     var m emircapi.Message
 
+    m.Source = id
     m.Raw = line.Raw
     m.Command = line.Cmd
     m.Origin = line.Nick
@@ -17,20 +19,20 @@ func newMessage(line *irc.Line) emircapi.Message {
     return m
 }
 
-func makeSendToChannelCallback(bot *IRCBot) func(*irc.Conn, *irc.Line) {
+func channelCallback(bot *IRCBot) func(*irc.Conn, *irc.Line) {
     return func(conn *irc.Conn, line *irc.Line) {
-        go func(){
-            bot.Messages <- newMessage(line)
+        go func() {
+            bot.Messages <- newMessage(bot.identifier, line)
         }()
     }
 }
 
-func makeLoggingCallback(bot *IRCBot) func(*irc.Conn, *irc.Line) {
+func loggingCallback(bot *IRCBot, logger *log.Logger) func(*irc.Conn, *irc.Line) {
     return func(conn *irc.Conn, line *irc.Line) {
-        m := newMessage(line)
-        log().Printf("new message: %s\n", m.Command)
-        log().Printf("raw:         %s\n", m.Raw)
-        log().Printf("origin:      %s\n", m.Origin)
-        log().Printf("parameters:  %s\n", m.Parameters)
+        m := newMessage(bot.identifier, line)
+        logger.Printf("new message: %s\n", m.Command)
+        logger.Printf("raw:         %s\n", m.Raw)
+        logger.Printf("origin:      %s\n", m.Origin)
+        logger.Printf("parameters:  %s\n", m.Parameters)
     }
 }
