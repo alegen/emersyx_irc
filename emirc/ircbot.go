@@ -13,15 +13,15 @@ type IRCBot struct {
     api *irc.Conn
     cfg *irc.Config
     identifier string
-    Messages chan emcomapi.Event
+    messages chan emcomapi.Event
 }
 
 // This function creates a new emircapi.IRCBot instance and applies to configuration specified in the arguments.
 func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error) {
     bot := new(IRCBot)
 
-    // create the Messages channel
-    bot.Messages = make(chan emcomapi.Event)
+    // create the messages channel
+    bot.messages = make(chan emcomapi.Event)
 
     // create a Config object for the underlying library
     bot.cfg = irc.NewConfig("placeholder")

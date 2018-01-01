@@ -26,7 +26,7 @@ func newMessage(id string, line *irc.Line) emircapi.Message {
 func channelCallback(bot *IRCBot) func(*irc.Conn, *irc.Line) {
     return func(conn *irc.Conn, line *irc.Line) {
         go func() {
-            bot.Messages <- newMessage(bot.identifier, line)
+            bot.messages <- newMessage(bot.identifier, line)
         }()
     }
 }

@@ -44,5 +44,5 @@ func (bot *IRCBot) GetIdentifier() string {
 }
 
 func (bot *IRCBot) GetEventsChannel() chan emcomapi.Event {
-    return bot.Messages;
+    return bot.messages;
 }
