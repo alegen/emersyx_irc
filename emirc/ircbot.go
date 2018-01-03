@@ -16,7 +16,7 @@ type IRCBot struct {
     messages chan emcomapi.Event
 }
 
-// This function creates a new emircapi.IRCBot instance and applies to configuration specified in the arguments.
+// NewIRCBot creates a new emircapi.IRCBot instance and applies to configuration specified in the arguments.
 func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error) {
     bot := new(IRCBot)
 
@@ -48,7 +48,7 @@ func NewIRCBot(options ...func (emircapi.IRCBot) error) (emircapi.IRCBot, error)
 
     // check if the mandatory identifier value has been set
     if len(bot.identifier) == 0 {
-        return nil, errors.New("Identifier option has not been set.")
+        return nil, errors.New("identifier option has not been set")
     }
 
     // create the underlying Conn object

@@ -9,9 +9,9 @@ import(
     "emersyx.net/emersyx_apis/emircapi"
 )
 
-var nick *string = flag.String("nick", "", "IRC bot nick used during testing")
-var channel *string = flag.String("channel", "", "IRC channel to join during testing")
-var sendto *string = flag.String("sendto", "", "IRC user to send message to during testing")
+var nick = flag.String("nick", "", "IRC bot nick used during testing")
+var channel = flag.String("channel", "", "IRC channel to join during testing")
+var sendto = flag.String("sendto", "", "IRC user to send message to during testing")
 
 func TestConnection(t *testing.T) {
     opt := NewIRCOptions()
