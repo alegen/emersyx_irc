@@ -1,4 +1,4 @@
-# emersyx_irc
+# emersyx_irc [![Build Status](https://travis-ci.org/emersyx/emersyx_irc.svg?branch=master)](https://travis-ci.org/emersyx/emersyx_irc)
 
 IRC receptor and resource for emersyx.
 
