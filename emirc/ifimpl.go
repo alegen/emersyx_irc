@@ -46,12 +46,12 @@ func (bot *IRCBot) Privmsg(to, msg string) error {
 	return errors.New("the IRCBot instance is not connected to any server")
 }
 
-// GetIdentifier returns the identifier of the receptor which generated this emersyx event.
+// GetIdentifier returns the identifier of this receptor.
 func (bot *IRCBot) GetIdentifier() string {
 	return bot.identifier
 }
 
-// GetEventsChannel returns the emcomapi.Event channel through which emersyx events are pushed.
+// GetEventsChannel returns the emcomapi.Event channel through which emersyx events are pushed by this receptor.
 func (bot *IRCBot) GetEventsChannel() chan emcomapi.Event {
 	return bot.messages
 }
