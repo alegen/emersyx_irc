@@ -1,5 +1,6 @@
 # emersyx_irc [![Build Status][build-img]][build-url] [![Go Report Card][gorep-img]][gorep-url]
-IRC receptor and resource for emersyx.
+
+IRC bot (i.e. receptor plus resource) for emersyx.
 
 ## Build
 
