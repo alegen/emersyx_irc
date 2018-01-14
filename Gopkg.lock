@@ -3,9 +3,15 @@
 
 [[projects]]
   branch = "master"
+  name = "emersyx.net/emersyx_apis"
+  packages = ["emcomapi","emircapi"]
+  revision = "f91ae2b1efd4c2513384a5668d4668e08f1f3b31"
+
+[[projects]]
+  branch = "master"
   name = "github.com/fluffle/goirc"
   packages = ["client","logging","state"]
-  revision = "c981f8f5680c85268c75c68e4945abc55ba70de0"
+  revision = "a7abc67ac229ff40f2b09dbb4851585d99ec1aca"
 
 [[projects]]
   name = "github.com/golang/mock"
@@ -17,11 +23,11 @@
   branch = "master"
   name = "golang.org/x/net"
   packages = ["proxy"]
-  revision = "1c05540f6879653db88113bc4a2b70aec4bd491f"
+  revision = "5ccada7d0a7ba9aeb5d3aca8d3501b4c2a509fec"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3d2be95fc2e17c2aea3ed8f20827ac81bac9926a054c848834a6ca149d332c15"
+  inputs-digest = "c3e9f4cddcf6e6f389741166161667843b7ec6e8ff5f462037641056c621f4d5"
   solver-name = "gps-cdcl"
   solver-version = 1
