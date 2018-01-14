@@ -1,6 +1,10 @@
-.PHONY: emirc test
+.PHONY: emirc-dep emirc-goget test
 
-emirc:
+emirc-dep:
+	dep ensure
+	go build -buildmode=plugin -o emirc.so emirc/*
+
+emirc-goget:
 	go get -t -buildmode=plugin ./emirc
 
 test:
