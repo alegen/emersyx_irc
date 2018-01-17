@@ -5,53 +5,55 @@ import (
 	"errors"
 )
 
-// This file contains implementations of methods that are mandatory to implement the emircapi.IRCBot interfaces.
+// This file contains implementations of methods that are mandatory to implement the emircapi.IRCGateway interfaces.
 
-// Connect start the connection process of the IRC bot to the server. This is a blocking call. If the bot connects to
-// the server without errors, then nil is returned. Otherwise an error with the appropriate message is returned.
-func (bot *IRCBot) Connect() error {
-	err := bot.api.Connect()
+// Connect start the connection process of the IRC gateway to the server. This is a blocking call. If the gateway
+// connects to the server without errors, then nil is returned. Otherwise an error with the appropriate message is
+// returned.
+func (gw *IRCGateway) Connect() error {
+	err := gw.api.Connect()
 	return err
 }
 
-// IsConnected returned true if the bot is connected to the IRC server, otherwise it returns false.
-func (bot *IRCBot) IsConnected() bool {
-	return bot.api.Connected()
+// IsConnected returned true if the gateway is connected to the IRC server, otherwise it returns false.
+func (gw *IRCGateway) IsConnected() bool {
+	return gw.api.Connected()
 }
 
-// Quit disconnects the IRC bot from the server. If the bot disconnects from the server without errors, then nil is
-// returned. Otherwise an error with the appropriate message is returned.
-func (bot *IRCBot) Quit() error {
-	err := bot.api.Close()
+// Quit disconnects the IRC gateway from the server. If the gateway disconnects from the server without errors, then nil
+// is returned. Otherwise an error with the appropriate message is returned.
+func (gw *IRCGateway) Quit() error {
+	err := gw.api.Close()
 	return err
 }
 
-// Join sends the command for the IRC bot to join a channel. The channel is specified in the method argument. If the bot
-// joins the channel without errors, then nil is returned. Otherwise an error with the appropriate message is returned.
-func (bot *IRCBot) Join(ch string) error {
-	if bot.IsConnected() {
-		bot.api.Join(ch)
+// Join sends the command for the IRC gateway to join a channel. The channel is specified in the method argument. If the
+// gateway joins the channel without errors, then nil is returned. Otherwise an error with the appropriate message is
+// returned.
+func (gw *IRCGateway) Join(ch string) error {
+	if gw.IsConnected() {
+		gw.api.Join(ch)
 		return nil
 	}
-	return errors.New("the IRCBot instance is not connected to any server")
+	return errors.New("the IRCGateway instance is not connected to any server")
 }
 
 // Privmsg sends either a message to an IRC channel or a private message to another user, depending on the method
 // argument.
-func (bot *IRCBot) Privmsg(to, msg string) error {
-	if bot.IsConnected() {
-		bot.api.Privmsg(to, msg)
+func (gw *IRCGateway) Privmsg(to, msg string) error {
+	if gw.IsConnected() {
+		gw.api.Privmsg(to, msg)
 		return nil
 	}
-	return errors.New("the IRCBot instance is not connected to any server")
+	return errors.New("the IRCGateway instance is not connected to any server")
 }
 
 // GetIdentifier returns the identifier of this receptor.
-func (bot *IRCBot) GetIdentifier() string {
-	return bot.identifier
+func (gw *IRCGateway) GetIdentifier() string {
+	return gw.identifier
 }
 
 // GetEventsChannel returns the emcomapi.Event channel through which emersyx events are pushed by this receptor.
-func (bot *IRCBot) GetEventsChannel() chan emcomapi.Event {
-	return bot.messages
+func (gw *IRCGateway) GetEventsChannel() chan emcomapi.Event {
+	return gw.messages
 }

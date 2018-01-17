@@ -22,20 +22,20 @@ func newMessage(id string, line *irc.Line) emircapi.Message {
 }
 
 // This function creates a callback for the underlying IRC library. The callback receives the Line object, converts it
-// into a emircapi.Message object and sends it via the IRCBot event channel.
-func channelCallback(bot *IRCBot) func(*irc.Conn, *irc.Line) {
+// into a emircapi.Message object and sends it via the IRCGateway event channel.
+func channelCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
 	return func(conn *irc.Conn, line *irc.Line) {
 		go func() {
-			bot.messages <- newMessage(bot.identifier, line)
+			gw.messages <- newMessage(gw.identifier, line)
 		}()
 	}
 }
 
 // This function creates a callback for the underlying IRC library. The callback receives the Line object, converts it
 // into a emircapi.Message object and logs the contents.
-func loggingCallback(bot *IRCBot, logger *log.Logger) func(*irc.Conn, *irc.Line) {
+func loggingCallback(gw *IRCGateway, logger *log.Logger) func(*irc.Conn, *irc.Line) {
 	return func(conn *irc.Conn, line *irc.Line) {
-		m := newMessage(bot.identifier, line)
+		m := newMessage(gw.identifier, line)
 		logger.Printf("New message:\n")
 		logger.Printf("Source      %s\n", m.Source)
 		logger.Printf("Raw         %s\n", m.Raw)

@@ -9,15 +9,15 @@ import (
 	"time"
 )
 
-var nick = flag.String("nick", "", "IRC bot nick used during testing")
+var nick = flag.String("nick", "", "IRC gw nick used during testing")
 var channel = flag.String("channel", "", "IRC channel to join during testing")
 var sendto = flag.String("sendto", "", "IRC user to send message to during testing")
 
 func TestConnection(t *testing.T) {
 	opt := NewIRCOptions()
 
-	// create a new IRCBot
-	bot, err := NewIRCBot(
+	// create a new IRCGateway
+	gw, err := NewIRCGateway(
 		opt.Identifier("emirc-test"),
 		opt.Nick(*nick),
 		opt.Server("chat.freenode.net", 6697, true),
@@ -31,7 +31,7 @@ func TestConnection(t *testing.T) {
 	}
 
 	// attempt to connect to the server
-	err = bot.Connect()
+	err = gw.Connect()
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()
@@ -39,19 +39,19 @@ func TestConnection(t *testing.T) {
 	}
 
 	// if we reached this point, we will have to quit the server at the end
-	defer bot.Quit()
+	defer gw.Quit()
 
 	// for testing, we connect to the channel
-	bot.Join(*channel)
+	gw.Join(*channel)
 	// and send a private message
-	bot.Privmsg(*sendto, "hello world!")
+	gw.Privmsg(*sendto, "hello world!")
 
 	// when running go test with -short option, then do not test received messages
 	if testing.Short() {
 		// only wait for the connection and everything to happen
 		time.Sleep(20)
 	} else {
-		messages := (bot.(emcomapi.Receptor)).GetEventsChannel()
+		messages := (gw.(emcomapi.Receptor)).GetEventsChannel()
 		for i := 0; i < 20; i++ {
 			m := <-messages
 			// check the source identifier to be correct

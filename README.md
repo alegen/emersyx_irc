@@ -1,6 +1,6 @@
 # emersyx_irc [![Build Status][build-img]][build-url] [![Go Report Card][gorep-img]][gorep-url]
 
-IRC bot (i.e. receptor plus resource) for emersyx.
+IRC gateway (i.e. receptor plus resource) for emersyx.
 
 ## Build
 
@@ -16,11 +16,11 @@ The resulting `emirc.so` file can then be used by emersyx core.
 
 ## Notes
 
-The `IRCBot` struct follows the APIs defined in the [emersyx_apis][1] repository, specifically those from the
+The `IRCGateway` struct follows the APIs defined in the [emersyx_apis][1] repository, specifically those from the
 [emircapi][2] folder.
 
-The `NewIRCBot` function must be used to create new `IRCBot` instances. An example of how to use this function can be
-found in the `emirc/ircbot_test.go` file.
+The `NewIRCGateway` function must be used to create new `IRCGateway` instances. An example of how to use this function
+can be found in the `emirc/ircgw_test.go` file.
 
 ## Credits
 
