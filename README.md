@@ -1,6 +1,6 @@
 # emersyx_irc [![Build Status][build-img]][build-url] [![Go Report Card][gorep-img]][gorep-url]
 
-IRC gateway (i.e. receptor plus resource) for emersyx.
+IRC gateway (receptor & resource) for emersyx.
 
 ## Build
 
