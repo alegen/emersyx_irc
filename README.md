@@ -1,4 +1,4 @@
-# emersyx_irc [![Build Status][build-img]][build-url] [![Go Report Card][gorep-img]][gorep-url]
+# emersyx_irc [![Build Status][build-img]][build-url] [![Go Report Card][gorep-img]][gorep-url] [![GoDoc][godoc-img]][godoc-url]
 
 IRC gateway (receptor & resource) for emersyx.
 
@@ -30,6 +30,8 @@ The underlying implementation is provided by [fluffle/goirc][3].
 [build-url]: https://travis-ci.org/emersyx/emersyx_irc
 [gorep-img]: https://goreportcard.com/badge/github.com/emersyx/emersyx_irc
 [gorep-url]: https://goreportcard.com/report/github.com/emersyx/emersyx_irc
+[godoc-img]: https://godoc.org/emersyx.net/emersyx_irc?status.svg
+[godoc-url]: https://godoc.org/emersyx.net/emersyx_irc
 [1]: https://github.com/emersyx/emersyx_apis
 [2]: https://github.com/emersyx/emersyx_apis/tree/master/emircapi
 [3]: https://github.com/fluffle/goirc
