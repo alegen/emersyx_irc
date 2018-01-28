@@ -37,8 +37,6 @@ func NewIRCGateway(options ...func(emircapi.IRCGateway) error) (emircapi.IRCGate
 	gw.cfg.NewNick = func(n string) string { return n + "^" }
 
 	// apply the configuration options received as arguments
-	// this configuration method is inspired from
-	// https://dave.cheney.net/2014/10/17/functional-options-for-friendly-apis
 	for _, option := range options {
 		err := option(gw)
 		if err != nil {
