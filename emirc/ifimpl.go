@@ -54,6 +54,6 @@ func (gw *IRCGateway) GetIdentifier() string {
 }
 
 // GetEventsChannel returns the emcomapi.Event channel through which emersyx events are pushed by this receptor.
-func (gw *IRCGateway) GetEventsChannel() chan emcomapi.Event {
-	return gw.messages
+func (gw *IRCGateway) GetEventsChannel() <-chan emcomapi.Event {
+	return (<-chan emcomapi.Event)(gw.messages)
 }
