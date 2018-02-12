@@ -5,7 +5,7 @@
   branch = "master"
   name = "emersyx.net/emersyx_apis"
   packages = ["emcomapi","emircapi"]
-  revision = "7d7a6d4783a19b96d658270af206b1e04de8c941"
+  revision = "086e395beaab47f3779b4c6decba75e25c1c0f0b"
 
 [[projects]]
   branch = "master"
