@@ -1,4 +1,4 @@
-package emirc
+package main
 
 import (
 	"crypto/tls"

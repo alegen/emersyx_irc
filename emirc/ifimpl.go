@@ -1,4 +1,4 @@
-package emirc
+package main
 
 import (
 	"emersyx.net/emersyx_apis/emcomapi"
