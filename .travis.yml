@@ -5,7 +5,7 @@ language: go
 
 # versions to test against
 go:
-    - 1.9
+    - "1.10"
     - master
 
 matrix:
