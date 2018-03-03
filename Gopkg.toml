@@ -1,7 +1,0 @@
-[[constraint]]
-  branch = "master"
-  name = "emersyx.net/emersyx_apis"
-
-[[constraint]]
-  branch = "master"
-  name = "github.com/fluffle/goirc"
