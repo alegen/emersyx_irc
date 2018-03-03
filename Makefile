@@ -8,6 +8,7 @@ goget:
 	go get github.com/fluffle/goirc/client
 	go get github.com/fluffle/goirc/logging
 	go get github.com/fluffle/goirc/state
+	go get github.com/golang/lint/golint
 
 .PHONY: test
 test: emirc.so

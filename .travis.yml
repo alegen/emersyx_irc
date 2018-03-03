@@ -28,7 +28,6 @@ install: false
 gobuild_args: -buildmode=plugin
 
 before_script:
-    - go get github.com/golang/lint/golint                          # get the official go linter
 
 script:
     - make test
