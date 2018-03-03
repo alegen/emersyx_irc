@@ -4,15 +4,8 @@ IRC gateway (receptor & resource) for emersyx.
 
 ## Build
 
-Source files in `emirc` provide the implementation of the go plugin. The easiest way to get all dependencies is by using
-the [dep][4] tool. The commands to build the plugin are:
-
-```
-dep ensure
-go build -buildmode=plugin -o emirc.so emirc/*
-```
-
-The resulting `emirc.so` file can then be used by emersyx core.
+Source files in `emirc` provide the implementation of the go plugin. The plugin can be built by running `make`. The
+resulting `emirc.so` file can then be used by emersyx core.
 
 ## Notes
 
@@ -35,4 +28,3 @@ The underlying implementation is provided by [fluffle/goirc][3].
 [1]: https://github.com/emersyx/emersyx_apis
 [2]: https://github.com/emersyx/emersyx_apis/tree/master/emircapi
 [3]: https://github.com/fluffle/goirc
-[4]: https://github.com/golang/dep
