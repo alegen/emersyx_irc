@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"emersyx.net/emersyx_apis/emircapi"
 	"errors"
+	"io"
 	"math"
 	"strconv"
 )
@@ -11,6 +12,22 @@ import (
 // IRCOptions implements the emircapi.IRCOptions interface. Each method returns a function, which applies a specific
 // configuration to an IRCGateway object.
 type IRCOptions struct {
+}
+
+// Logging sets the io.Writer instance to write logging messages to and the verbosity level.
+func (o IRCOptions) Logging(writer io.Writer, level uint) func(emircapi.IRCGateway) error {
+	return func(gw emircapi.IRCGateway) error {
+		if writer == nil {
+			return errors.New("writer argument cannot be nil")
+		}
+		cgw, ok := gw.(*IRCGateway)
+		if ok == false {
+			return errors.New("unsupported IRCGateway implementation")
+		}
+		cgw.log.SetOutput(writer)
+		cgw.log.SetLevel(level)
+		return nil
+	}
 }
 
 // Identifier sets the receptor identifier value for the IRC gateway.

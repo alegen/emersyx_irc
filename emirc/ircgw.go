@@ -3,6 +3,7 @@ package main
 import (
 	"emersyx.net/emersyx_apis/emcomapi"
 	"emersyx.net/emersyx_apis/emircapi"
+	"emersyx.net/emersyx_log/emlog"
 	"errors"
 	irc "github.com/fluffle/goirc/client"
 )
@@ -12,12 +13,15 @@ import (
 type IRCGateway struct {
 	api        *irc.Conn
 	cfg        *irc.Config
+	log        *emlog.EmersyxLogger
 	identifier string
 	messages   chan emcomapi.Event
 }
 
 // NewIRCGateway creates a new emircapi.IRCGateway instance and applies to configuration specified in the arguments.
 func NewIRCGateway(options ...func(emircapi.IRCGateway) error) (emircapi.IRCGateway, error) {
+	var err error
+
 	gw := new(IRCGateway)
 
 	// create the messages channel
@@ -36,6 +40,12 @@ func NewIRCGateway(options ...func(emircapi.IRCGateway) error) (emircapi.IRCGate
 	// standard function for generating new nicks
 	gw.cfg.NewNick = func(n string) string { return n + "^" }
 
+	// generate a bare logger, to be updated via options
+	gw.log, err = emlog.NewEmersyxLogger(nil, "", emlog.ELNone)
+	if err != nil {
+		return nil, errors.New("could not create a bare logger")
+	}
+
 	// apply the configuration options received as arguments
 	for _, option := range options {
 		err := option(gw)
@@ -44,7 +54,6 @@ func NewIRCGateway(options ...func(emircapi.IRCGateway) error) (emircapi.IRCGate
 		}
 	}
 
-	// check if the mandatory identifier value has been set
 	if len(gw.identifier) == 0 {
 		return nil, errors.New("identifier option has not been set")
 	}
