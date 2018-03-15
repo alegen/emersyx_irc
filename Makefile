@@ -5,6 +5,7 @@ emirc.so: goget
 goget:
 	@go get emersyx.net/emersyx_apis/emcomapi
 	@go get emersyx.net/emersyx_apis/emircapi
+	@go get emersyx.net/emersyx_log/emlog
 	@go get github.com/fluffle/goirc/client
 	@go get github.com/fluffle/goirc/logging
 	@go get github.com/fluffle/goirc/state
