@@ -41,6 +41,7 @@ func (o IRCOptions) Identifier(id string) func(emircapi.IRCGateway) error {
 			return errors.New("unsupported IRCGateway implementation")
 		}
 		cgw.identifier = id
+		cgw.log.SetComponentID(id)
 		return nil
 	}
 }
