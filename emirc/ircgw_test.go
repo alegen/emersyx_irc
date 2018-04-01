@@ -51,7 +51,7 @@ func TestConnection(t *testing.T) {
 		// only wait for the connection and everything to happen
 		time.Sleep(20)
 	} else {
-		messages := (gw.(emcomapi.Receptor)).GetEventsChannel()
+		messages := (gw.(emcomapi.Receptor)).GetEventsOutChannel()
 		for i := 0; i < 20; i++ {
 			m := <-messages
 			// check the source identifier to be correct
