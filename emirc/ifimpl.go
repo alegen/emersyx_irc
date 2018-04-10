@@ -1,12 +1,28 @@
 package main
 
 import (
-	"emersyx.net/emersyx_apis/emcomapi"
+	"emersyx.net/emersyx/api"
 	"errors"
 	"time"
 )
 
-// This file contains implementations of methods that are mandatory to implement the emircapi.IRCGateway interfaces.
+// GetIdentifier returns the identifier of this receptor.
+func (gw *IRCGateway) GetIdentifier() string {
+	return gw.identifier
+}
+
+// GetEventsInChannel returns the api.CoreEvent channel through which core events are received by the gateway
+// instance.
+func (gw *IRCGateway) GetEventsInChannel() chan<- api.Event {
+	// TODO implement a system where core events are received and appropriate actions are taken (i.e. disconnect from
+	// the server when receiving the shutdown event).
+	return nil
+}
+
+// GetEventsOutChannel returns the api.Event channel through which emersyx events are pushed by this gateway.
+func (gw *IRCGateway) GetEventsOutChannel() <-chan api.Event {
+	return (<-chan api.Event)(gw.messages)
+}
 
 // Connect start the connection process of the IRC gateway to the server. This is a blocking call. If the gateway
 // connects to the server without errors, then nil is returned. Otherwise an error with the appropriate message is
@@ -55,22 +71,4 @@ func (gw *IRCGateway) Privmsg(to, msg string) error {
 		return nil
 	}
 	return errors.New("the IRCGateway instance is not connected to any server")
-}
-
-// GetIdentifier returns the identifier of this receptor.
-func (gw *IRCGateway) GetIdentifier() string {
-	return gw.identifier
-}
-
-// GetEventsOutChannel returns the emcomapi.Event channel through which emersyx events are pushed by this gateway.
-func (gw *IRCGateway) GetEventsOutChannel() <-chan emcomapi.Event {
-	return (<-chan emcomapi.Event)(gw.messages)
-}
-
-// GetEventsInChannel returns the emcomapi.CoreEvent channel through which core events are received by the gateway
-// instance.
-func (gw *IRCGateway) GetEventsInChannel() chan<- emcomapi.CoreEvent {
-	// TODO implement a system where core events are received and appropriate actions are taken (i.e. disconnect from
-	// the server when receiving the shutdown event).
-	return nil
 }

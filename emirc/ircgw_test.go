@@ -1,8 +1,7 @@
 package main
 
 import (
-	"emersyx.net/emersyx_apis/emcomapi"
-	"emersyx.net/emersyx_apis/emircapi"
+	"emersyx.net/emersyx/api"
 	"flag"
 	"fmt"
 	"testing"
@@ -12,16 +11,17 @@ import (
 var nick = flag.String("nick", "", "IRC gw nick used during testing")
 var channel = flag.String("channel", "", "IRC channel to join during testing")
 var sendto = flag.String("sendto", "", "IRC user to send message to during testing")
+var conffile = flag.String("conffile", "", "path to toml configuration file")
 
 func TestConnection(t *testing.T) {
-	opt := NewIRCOptions()
+	opt := NewPeripheralOptions()
 
 	// create a new IRCGateway
-	gw, err := NewIRCGateway(
+	peripheral, err := NewPeripheral(
 		opt.Identifier("emirc-test"),
-		opt.Nick(*nick),
-		opt.Server("chat.freenode.net", 6697, true),
+		opt.ConfigPath(*conffile),
 	)
+	gw := peripheral.(*IRCGateway)
 
 	// check for failure
 	if err != nil {
@@ -51,7 +51,7 @@ func TestConnection(t *testing.T) {
 		// only wait for the connection and everything to happen
 		time.Sleep(20)
 	} else {
-		messages := (gw.(emcomapi.Receptor)).GetEventsOutChannel()
+		messages := gw.GetEventsOutChannel()
 		for i := 0; i < 20; i++ {
 			m := <-messages
 			// check the source identifier to be correct
@@ -61,7 +61,7 @@ func TestConnection(t *testing.T) {
 				return
 			}
 			// print all the contents of the Message
-			cm := m.(emircapi.Message)
+			cm := m.(api.IRCMessage)
 			fmt.Printf("-----\n")
 			fmt.Printf("Source      %s\n", cm.Source)
 			fmt.Printf("Raw         %s\n", cm.Raw)

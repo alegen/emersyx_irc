@@ -1,0 +1,9 @@
+# This is an example configuration file for an emirc.IRCGateway instance.
+nick = "emersyx"
+ident = "emersyx"
+name = "emersyx"
+version = "alpha"
+server_address = "chat.freenode.net"
+server_port = 6697
+server_use_ssl = true
+quit_message = "bye from emersyx!"

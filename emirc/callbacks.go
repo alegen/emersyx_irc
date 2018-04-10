@@ -1,15 +1,14 @@
 package main
 
 import (
-	"emersyx.net/emersyx_apis/emircapi"
+	"emersyx.net/emersyx/api"
 	irc "github.com/fluffle/goirc/client"
-	"log"
 )
 
-// This function converts a Line object received from the underlying IRC library into an emircapi.Message object
-// containing the same information.
-func newMessage(id string, line *irc.Line) emircapi.Message {
-	var m emircapi.Message
+// newMessage converts a Line object received from the underlying IRC library into an api.IRCMessage object containing the
+// same information.
+func newMessage(id string, line *irc.Line) api.IRCMessage {
+	var m api.IRCMessage
 
 	m.Source = id
 	m.Raw = line.Raw
@@ -21,8 +20,8 @@ func newMessage(id string, line *irc.Line) emircapi.Message {
 	return m
 }
 
-// This function creates a callback for the underlying IRC library. The callback receives the Line object, converts it
-// into a emircapi.Message object and sends it via the IRCGateway event channel.
+// channelCallback creates a callback for the underlying IRC library. The callback receives the Line object, converts it
+// into a api.Message object and sends it via the IRCGateway event channel.
 func channelCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
 	return func(conn *irc.Conn, line *irc.Line) {
 		go func() {
@@ -31,20 +30,20 @@ func channelCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
 	}
 }
 
-// This function creates a callback for the underlying IRC library. The callback receives the Line object, converts it
-// into a emircapi.Message object and logs the contents.
-func loggingCallback(gw *IRCGateway, logger *log.Logger) func(*irc.Conn, *irc.Line) {
+// loggingCallback creates a callback for the underlying IRC library. The callback receives the Line object, converts it
+// into a api.Message object and logs the contents.
+func loggingCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
 	return func(conn *irc.Conn, line *irc.Line) {
 		m := newMessage(gw.identifier, line)
-		logger.Printf("New message:\n")
-		logger.Printf("Source      %s\n", m.Source)
-		logger.Printf("Raw         %s\n", m.Raw)
-		logger.Printf("Command     %s\n", m.Command)
-		logger.Printf("Origin      %s\n", m.Origin)
-		logger.Printf("Parameters:\n")
+		gw.log.Debugf("New message:\n")
+		gw.log.Debugf("Source      %s\n", m.Source)
+		gw.log.Debugf("Raw         %s\n", m.Raw)
+		gw.log.Debugf("Command     %s\n", m.Command)
+		gw.log.Debugf("Origin      %s\n", m.Origin)
+		gw.log.Debugf("Parameters:\n")
 		for i, p := range m.Parameters {
-			logger.Printf("%d. %s\n", i, p)
+			gw.log.Debugf("%d. %s\n", i, p)
 		}
-		logger.Printf("-----\n")
+		gw.log.Debugf("-----\n")
 	}
 }

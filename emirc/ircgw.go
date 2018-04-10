@@ -1,47 +1,49 @@
 package main
 
 import (
-	"emersyx.net/emersyx_apis/emcomapi"
-	"emersyx.net/emersyx_apis/emircapi"
-	"emersyx.net/emersyx_log/emlog"
+	"emersyx.net/emersyx/api"
+	"emersyx.net/emersyx/log"
 	"errors"
 	irc "github.com/fluffle/goirc/client"
 )
 
 // The IRCGateway struct defines the implementation of an IRC receptor and resource. The struct implements the
-// emircapi.IRCGateway and emcomapi.Receptor interfaces.
+// api.IRCGateway and api.Receptor interfaces.
+// TODO make this type private
 type IRCGateway struct {
-	api        *irc.Conn
-	cfg        *irc.Config
-	log        *emlog.EmersyxLogger
-	identifier string
-	messages   chan emcomapi.Event
+	core         api.Core
+	api          *irc.Conn
+	config       *ircGatewayConfig
+	clientConfig *irc.Config
+	log          *log.EmersyxLogger
+	identifier   string
+	messages     chan api.Event
 }
 
-// NewIRCGateway creates a new emircapi.IRCGateway instance and applies to configuration specified in the arguments.
-func NewIRCGateway(options ...func(emircapi.IRCGateway) error) (emircapi.IRCGateway, error) {
+// NewPeripheral creates a new api.IRCGateway instance and applies to configuration specified in the arguments.
+func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error) {
 	var err error
 
 	gw := new(IRCGateway)
 
 	// create the messages channel
-	gw.messages = make(chan emcomapi.Event)
+	gw.messages = make(chan api.Event)
 
 	// create a Config object for the underlying library
-	gw.cfg = irc.NewConfig("placeholder")
+	gw.clientConfig = irc.NewConfig("placeholder")
 
 	// override several default values from the underlying library
-	gw.cfg.Me.Ident = "emersyx"
-	gw.cfg.Me.Name = "emersyx"
-	gw.cfg.Version = "emersyx"
-	gw.cfg.SSL = false
-	gw.cfg.QuitMessage = "bye"
+	gw.clientConfig.Me.Ident = "emersyx"
+	gw.clientConfig.Me.Name = "emersyx"
+	gw.clientConfig.Version = "emersyx"
+	gw.clientConfig.SSL = false
+	gw.clientConfig.QuitMessage = "bye"
 
 	// standard function for generating new nicks
-	gw.cfg.NewNick = func(n string) string { return n + "^" }
+	gw.clientConfig.NewNick = func(n string) string { return n + "^" }
 
 	// generate a bare logger, to be updated via options
-	gw.log, err = emlog.NewEmersyxLogger(nil, "", emlog.ELNone)
+	gw.log, err = log.NewEmersyxLogger(nil, "", log.ELNone)
 	if err != nil {
 		return nil, errors.New("could not create a bare logger")
 	}
@@ -59,7 +61,7 @@ func NewIRCGateway(options ...func(emircapi.IRCGateway) error) (emircapi.IRCGate
 	}
 
 	// create the underlying Conn object
-	gw.api = irc.Client(gw.cfg)
+	gw.api = irc.Client(gw.clientConfig)
 
 	// initialize callbacks
 	gw.initCallbacks()
