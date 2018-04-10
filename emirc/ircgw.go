@@ -11,13 +11,12 @@ import (
 // api.IRCGateway and api.Receptor interfaces.
 // TODO make this type private
 type IRCGateway struct {
-	core         api.Core
-	api          *irc.Conn
-	config       *ircGatewayConfig
-	clientConfig *irc.Config
-	log          *log.EmersyxLogger
-	identifier   string
-	messages     chan api.Event
+	core       api.Core
+	api        *irc.Conn
+	config     *irc.Config
+	log        *log.EmersyxLogger
+	identifier string
+	messages   chan api.Event
 }
 
 // NewPeripheral creates a new api.IRCGateway instance and applies to configuration specified in the arguments.
@@ -30,17 +29,17 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 	gw.messages = make(chan api.Event)
 
 	// create a Config object for the underlying library
-	gw.clientConfig = irc.NewConfig("placeholder")
+	gw.config = irc.NewConfig("placeholder")
 
 	// override several default values from the underlying library
-	gw.clientConfig.Me.Ident = "emersyx"
-	gw.clientConfig.Me.Name = "emersyx"
-	gw.clientConfig.Version = "emersyx"
-	gw.clientConfig.SSL = false
-	gw.clientConfig.QuitMessage = "bye"
+	gw.config.Me.Ident = "emersyx"
+	gw.config.Me.Name = "emersyx"
+	gw.config.Version = "emersyx"
+	gw.config.SSL = false
+	gw.config.QuitMessage = "bye"
 
 	// standard function for generating new nicks
-	gw.clientConfig.NewNick = func(n string) string { return n + "^" }
+	gw.config.NewNick = func(n string) string { return n + "^" }
 
 	// generate a bare logger, to be updated via options
 	gw.log, err = log.NewEmersyxLogger(nil, "", log.ELNone)
@@ -61,7 +60,7 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 	}
 
 	// create the underlying Conn object
-	gw.api = irc.Client(gw.clientConfig)
+	gw.api = irc.Client(gw.config)
 
 	// initialize callbacks
 	gw.initCallbacks()

@@ -43,25 +43,25 @@ func (cfg *ircGatewayConfig) validate() error {
 
 // apply sets the values loaded from the toml configuration file into the IRCGateway object received as argument.
 func (cfg *ircGatewayConfig) apply(gw *IRCGateway) {
-	gw.clientConfig.Me.Nick = *cfg.Nick
-	gw.clientConfig.Me.Ident = *cfg.Ident
-	gw.clientConfig.Me.Name = *cfg.Name
+	gw.config.Me.Nick = *cfg.Nick
+	gw.config.Me.Ident = *cfg.Ident
+	gw.config.Me.Name = *cfg.Name
 	if cfg.Version != nil {
-		gw.clientConfig.Version = *cfg.Version
+		gw.config.Version = *cfg.Version
 	} else {
-		gw.clientConfig.Version = ""
+		gw.config.Version = ""
 	}
-	gw.clientConfig.Server = *cfg.ServerAddress + ":" + strconv.Itoa(int(*cfg.ServerPort))
+	gw.config.Server = *cfg.ServerAddress + ":" + strconv.Itoa(int(*cfg.ServerPort))
 	if cfg.ServerUseSSL != nil {
-		gw.clientConfig.SSL = *cfg.ServerUseSSL
+		gw.config.SSL = *cfg.ServerUseSSL
 	} else {
 		// defaults to secure tls connection
-		gw.clientConfig.SSL = true
+		gw.config.SSL = true
 	}
-	if gw.clientConfig.SSL {
-		gw.clientConfig.SSLConfig = &tls.Config{ServerName: *cfg.ServerAddress}
+	if gw.config.SSL {
+		gw.config.SSLConfig = &tls.Config{ServerName: *cfg.ServerAddress}
 	}
 	if cfg.QuitMessage != nil {
-		gw.clientConfig.QuitMessage = *cfg.QuitMessage
+		gw.config.QuitMessage = *cfg.QuitMessage
 	}
 }
