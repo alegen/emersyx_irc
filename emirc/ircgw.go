@@ -7,10 +7,9 @@ import (
 	irc "github.com/fluffle/goirc/client"
 )
 
-// The IRCGateway struct defines the implementation of an IRC receptor and resource. The struct implements the
+// The ircGateway struct defines the implementation of an IRC receptor and resource. The struct implements the
 // api.IRCGateway and api.Receptor interfaces.
-// TODO make this type private
-type IRCGateway struct {
+type ircGateway struct {
 	core       api.Core
 	api        *irc.Conn
 	config     *irc.Config
@@ -23,7 +22,7 @@ type IRCGateway struct {
 func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error) {
 	var err error
 
-	gw := new(IRCGateway)
+	gw := new(ircGateway)
 
 	// create the messages channel
 	gw.messages = make(chan api.Event)
@@ -68,7 +67,8 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 	return gw, nil
 }
 
-func (gw *IRCGateway) initCallbacks() {
+// initCallbacks sets the callback functions for the internally used goirc library.
+func (gw *ircGateway) initCallbacks() {
 	gw.api.HandleFunc(irc.PRIVMSG, channelCallback(gw))
 	gw.api.HandleFunc(irc.JOIN, channelCallback(gw))
 	gw.api.HandleFunc(irc.QUIT, channelCallback(gw))

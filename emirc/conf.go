@@ -41,8 +41,8 @@ func (cfg *ircGatewayConfig) validate() error {
 	return nil
 }
 
-// apply sets the values loaded from the toml configuration file into the IRCGateway object received as argument.
-func (cfg *ircGatewayConfig) apply(gw *IRCGateway) {
+// apply sets the values loaded from the toml configuration file into the ircGateway object received as argument.
+func (cfg *ircGatewayConfig) apply(gw *ircGateway) {
 	gw.config.Me.Nick = *cfg.Nick
 	gw.config.Me.Ident = *cfg.Ident
 	gw.config.Me.Name = *cfg.Name

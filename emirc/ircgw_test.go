@@ -16,12 +16,12 @@ var conffile = flag.String("conffile", "", "path to toml configuration file")
 func TestConnection(t *testing.T) {
 	opt := NewPeripheralOptions()
 
-	// create a new IRCGateway
+	// create a new ircGateway
 	peripheral, err := NewPeripheral(
 		opt.Identifier("emirc-test"),
 		opt.ConfigPath(*conffile),
 	)
-	gw := peripheral.(*IRCGateway)
+	gw := peripheral.(*ircGateway)
 
 	// check for failure
 	if err != nil {

@@ -21,8 +21,8 @@ func newMessage(id string, line *irc.Line) api.IRCMessage {
 }
 
 // channelCallback creates a callback for the underlying IRC library. The callback receives the Line object, converts it
-// into a api.Message object and sends it via the IRCGateway event channel.
-func channelCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
+// into a api.Message object and sends it via the ircGateway event channel.
+func channelCallback(gw *ircGateway) func(*irc.Conn, *irc.Line) {
 	return func(conn *irc.Conn, line *irc.Line) {
 		go func() {
 			gw.messages <- newMessage(gw.identifier, line)
@@ -32,7 +32,7 @@ func channelCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
 
 // loggingCallback creates a callback for the underlying IRC library. The callback receives the Line object, converts it
 // into a api.Message object and logs the contents.
-func loggingCallback(gw *IRCGateway) func(*irc.Conn, *irc.Line) {
+func loggingCallback(gw *ircGateway) func(*irc.Conn, *irc.Line) {
 	return func(conn *irc.Conn, line *irc.Line) {
 		m := newMessage(gw.identifier, line)
 		gw.log.Debugf("New message:\n")
