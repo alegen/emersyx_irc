@@ -2,7 +2,7 @@
 
 IRC gateway (resource & peripheral) for emersyx.
 
-## Build
+## Usage
 
 Source files in `emirc` provide the implementation of the go plugin. The plugin can be built by running `make`. The
 resulting `emirc.so` file can then be used by the emersyx core and router implementations from the [main emersyx
