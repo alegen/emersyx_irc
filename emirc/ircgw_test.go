@@ -1,7 +1,7 @@
 package main
 
 import (
-	"emersyx.net/emersyx/api"
+	"emersyx.net/emersyx/api/ircapi"
 	"flag"
 	"fmt"
 	"testing"
@@ -61,7 +61,7 @@ func TestConnection(t *testing.T) {
 				return
 			}
 			// print all the contents of the Message
-			cm := m.(api.IRCMessage)
+			cm := m.(ircapi.IRCMessage)
 			fmt.Printf("-----\n")
 			fmt.Printf("Source      %s\n", cm.Source)
 			fmt.Printf("Raw         %s\n", cm.Raw)

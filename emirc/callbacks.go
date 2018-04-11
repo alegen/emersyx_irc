@@ -1,14 +1,14 @@
 package main
 
 import (
-	"emersyx.net/emersyx/api"
-	irc "github.com/fluffle/goirc/client"
+	"emersyx.net/emersyx/api/ircapi"
+	goirc "github.com/fluffle/goirc/client"
 )
 
-// newMessage converts a Line object received from the underlying IRC library into an api.IRCMessage object containing the
-// same information.
-func newMessage(id string, line *irc.Line) api.IRCMessage {
-	var m api.IRCMessage
+// newMessage converts a Line object received from the underlying IRC library into an ircapi.IRCMessage object
+// containing the same information.
+func newMessage(id string, line *goirc.Line) ircapi.IRCMessage {
+	var m ircapi.IRCMessage
 
 	m.Source = id
 	m.Raw = line.Raw
@@ -21,9 +21,9 @@ func newMessage(id string, line *irc.Line) api.IRCMessage {
 }
 
 // channelCallback creates a callback for the underlying IRC library. The callback receives the Line object, converts it
-// into a api.Message object and sends it via the ircGateway event channel.
-func channelCallback(gw *ircGateway) func(*irc.Conn, *irc.Line) {
-	return func(conn *irc.Conn, line *irc.Line) {
+// into a ircapi.Message object and sends it via the ircGateway event channel.
+func channelCallback(gw *ircGateway) func(*goirc.Conn, *goirc.Line) {
+	return func(conn *goirc.Conn, line *goirc.Line) {
 		go func() {
 			gw.messages <- newMessage(gw.identifier, line)
 		}()
@@ -31,9 +31,9 @@ func channelCallback(gw *ircGateway) func(*irc.Conn, *irc.Line) {
 }
 
 // loggingCallback creates a callback for the underlying IRC library. The callback receives the Line object, converts it
-// into a api.Message object and logs the contents.
-func loggingCallback(gw *ircGateway) func(*irc.Conn, *irc.Line) {
-	return func(conn *irc.Conn, line *irc.Line) {
+// into a ircapi.Message object and logs the contents.
+func loggingCallback(gw *ircGateway) func(*goirc.Conn, *goirc.Line) {
+	return func(conn *goirc.Conn, line *goirc.Line) {
 		m := newMessage(gw.identifier, line)
 		gw.log.Debugf("New message:\n")
 		gw.log.Debugf("Source      %s\n", m.Source)

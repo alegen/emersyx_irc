@@ -4,15 +4,15 @@ import (
 	"emersyx.net/emersyx/api"
 	"emersyx.net/emersyx/log"
 	"errors"
-	irc "github.com/fluffle/goirc/client"
+	goirc "github.com/fluffle/goirc/client"
 )
 
 // The ircGateway struct defines the implementation of an IRC receptor and resource. The struct implements the
 // api.IRCGateway and api.Receptor interfaces.
 type ircGateway struct {
 	core       api.Core
-	api        *irc.Conn
-	config     *irc.Config
+	api        *goirc.Conn
+	config     *goirc.Config
 	log        *log.EmersyxLogger
 	identifier string
 	messages   chan api.Event
@@ -28,7 +28,7 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 	gw.messages = make(chan api.Event)
 
 	// create a Config object for the underlying library
-	gw.config = irc.NewConfig("placeholder")
+	gw.config = goirc.NewConfig("placeholder")
 
 	// override several default values from the underlying library
 	gw.config.Me.Ident = "emersyx"
@@ -59,7 +59,7 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 	}
 
 	// create the underlying Conn object
-	gw.api = irc.Client(gw.config)
+	gw.api = goirc.Client(gw.config)
 
 	// initialize callbacks
 	gw.initCallbacks()
@@ -69,8 +69,8 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 
 // initCallbacks sets the callback functions for the internally used goirc library.
 func (gw *ircGateway) initCallbacks() {
-	gw.api.HandleFunc(irc.PRIVMSG, channelCallback(gw))
-	gw.api.HandleFunc(irc.JOIN, channelCallback(gw))
-	gw.api.HandleFunc(irc.QUIT, channelCallback(gw))
-	gw.api.HandleFunc(irc.PART, channelCallback(gw))
+	gw.api.HandleFunc(goirc.PRIVMSG, channelCallback(gw))
+	gw.api.HandleFunc(goirc.JOIN, channelCallback(gw))
+	gw.api.HandleFunc(goirc.QUIT, channelCallback(gw))
+	gw.api.HandleFunc(goirc.PART, channelCallback(gw))
 }
