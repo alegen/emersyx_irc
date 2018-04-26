@@ -1,9 +1,12 @@
 package main
 
 import (
+	"emersyx.net/emersyx/api"
 	"emersyx.net/emersyx/api/ircapi"
+	"emersyx.net/emersyx/log"
 	"flag"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 )
@@ -14,21 +17,22 @@ var sendto = flag.String("sendto", "", "IRC user to send message to during testi
 var conffile = flag.String("conffile", "", "path to toml configuration file")
 
 func TestConnection(t *testing.T) {
-	opt := NewPeripheralOptions()
-
 	// create a new ircGateway
 	peripheral, err := NewPeripheral(
-		opt.Identifier("emirc-test"),
-		opt.ConfigPath(*conffile),
+		api.PeripheralOptions{
+			Identifier: "emirc-test",
+			ConfigPath: *conffile,
+			LogWriter:  os.Stdout,
+			LogLevel:   log.ELDebug,
+		},
 	)
-	gw := peripheral.(*ircGateway)
-
-	// check for failure
 	if err != nil {
 		fmt.Println(err)
 		t.Fail()
 		return
 	}
+
+	gw := peripheral.(*ircGateway)
 
 	// attempt to connect to the server
 	err = gw.Connect()

@@ -4,6 +4,7 @@ import (
 	"emersyx.net/emersyx/api"
 	"emersyx.net/emersyx/log"
 	"errors"
+	"github.com/BurntSushi/toml"
 	goirc "github.com/fluffle/goirc/client"
 )
 
@@ -19,8 +20,13 @@ type ircGateway struct {
 }
 
 // NewPeripheral creates a new api.IRCGateway instance and applies to configuration specified in the arguments.
-func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error) {
+func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 	var err error
+
+	// validate identifier in options
+	if len(opts.Identifier) == 0 {
+		return nil, errors.New("identifier cannot have 0 length")
+	}
 
 	gw := new(ircGateway)
 
@@ -46,17 +52,22 @@ func NewPeripheral(options ...func(api.Peripheral) error) (api.Peripheral, error
 		return nil, errors.New("could not create a bare logger")
 	}
 
-	// apply the configuration options received as arguments
-	for _, option := range options {
-		err := option(gw)
-		if err != nil {
-			return nil, err
-		}
-	}
+	// apply the options received as argument
+	gw.identifier = opts.Identifier
+	gw.core = opts.Core
+	gw.log.SetOutput(opts.LogWriter)
+	gw.log.SetLevel(opts.LogLevel)
+	gw.log.SetComponentID(gw.identifier)
 
-	if len(gw.identifier) == 0 {
-		return nil, errors.New("identifier option has not been set")
+	// apply the extended options from the config file
+	config := new(ircGatewayConfig)
+	if _, err = toml.DecodeFile(opts.ConfigPath, config); err != nil {
+		return nil, err
 	}
+	if err = config.validate(); err != nil {
+		return nil, err
+	}
+	config.apply(gw)
 
 	// create the underlying Conn object
 	gw.api = goirc.Client(gw.config)
