@@ -33,14 +33,6 @@ func TestConnection(t *testing.T) {
 
 	gw := peripheral.(*ircGateway)
 
-	// attempt to connect to the server
-	err = gw.Connect()
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-		return
-	}
-
 	// if we reached this point, we will have to quit the server at the end
 	defer gw.Quit()
 
