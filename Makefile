@@ -4,7 +4,6 @@ emirc.so: goget
 .PHONY: goget
 goget:
 	@go get emersyx.net/emersyx/api
-	@go get emersyx.net/emersyx/log
 	@go get github.com/fluffle/goirc/client
 	@go get github.com/fluffle/goirc/logging
 	@go get github.com/fluffle/goirc/state

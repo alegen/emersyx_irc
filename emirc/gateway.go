@@ -2,7 +2,6 @@ package main
 
 import (
 	"emersyx.net/emersyx/api"
-	"emersyx.net/emersyx/log"
 	"errors"
 	"github.com/BurntSushi/toml"
 	goirc "github.com/fluffle/goirc/client"
@@ -14,7 +13,7 @@ type ircGateway struct {
 	core       api.Core
 	api        *goirc.Conn
 	config     *goirc.Config
-	log        *log.EmersyxLogger
+	log        *api.EmersyxLogger
 	identifier string
 	messages   chan api.Event
 }
@@ -46,18 +45,12 @@ func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 	// standard function for generating new nicks
 	gw.config.NewNick = func(n string) string { return n + "^" }
 
-	// generate a bare logger, to be updated via options
-	gw.log, err = log.NewEmersyxLogger(nil, "", log.ELNone)
-	if err != nil {
-		return nil, errors.New("could not create a bare logger")
-	}
-
-	// apply the options received as argument
 	gw.identifier = opts.Identifier
 	gw.core = opts.Core
-	gw.log.SetOutput(opts.LogWriter)
-	gw.log.SetLevel(opts.LogLevel)
-	gw.log.SetComponentID(gw.identifier)
+	gw.log, err = api.NewEmersyxLogger(opts.LogWriter, opts.Identifier, opts.LogLevel)
+	if err != nil {
+		return nil, err
+	}
 
 	// apply the extended options from the config file
 	config := new(ircGatewayConfig)
@@ -74,6 +67,9 @@ func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 
 	// initialize callbacks
 	gw.initCallbacks()
+
+	// connect to the server
+	gw.connect()
 
 	return gw, nil
 }

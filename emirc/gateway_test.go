@@ -3,7 +3,6 @@ package main
 import (
 	"emersyx.net/emersyx/api"
 	"emersyx.net/emersyx/api/ircapi"
-	"emersyx.net/emersyx/log"
 	"flag"
 	"fmt"
 	"os"
@@ -23,7 +22,7 @@ func TestConnection(t *testing.T) {
 			Identifier: "emirc-test",
 			ConfigPath: *conffile,
 			LogWriter:  os.Stdout,
-			LogLevel:   log.ELDebug,
+			LogLevel:   api.ELDebug,
 		},
 	)
 	if err != nil {
