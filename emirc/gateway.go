@@ -2,7 +2,6 @@ package main
 
 import (
 	"emersyx.net/emersyx/api"
-	"errors"
 	"github.com/BurntSushi/toml"
 	goirc "github.com/fluffle/goirc/client"
 )
@@ -10,24 +9,19 @@ import (
 // The ircGateway struct defines the implementation of an IRC receptor and resource. The struct implements the
 // api.IRCGateway and api.Receptor interfaces.
 type ircGateway struct {
-	core       api.Core
-	api        *goirc.Conn
-	config     *goirc.Config
-	log        *api.EmersyxLogger
-	identifier string
-	messages   chan api.Event
+	api.PeripheralBase
+	api      *goirc.Conn
+	config   *goirc.Config
+	messages chan api.Event
 }
 
 // NewPeripheral creates a new api.IRCGateway instance and applies to configuration specified in the arguments.
 func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 	var err error
 
-	// validate identifier in options
-	if len(opts.Identifier) == 0 {
-		return nil, errors.New("identifier cannot have 0 length")
-	}
-
+	// create a new ircGateway and initialize the base
 	gw := new(ircGateway)
+	gw.InitializeBase(opts)
 
 	// create the messages channel
 	gw.messages = make(chan api.Event)
@@ -44,13 +38,6 @@ func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 
 	// standard function for generating new nicks
 	gw.config.NewNick = func(n string) string { return n + "^" }
-
-	gw.identifier = opts.Identifier
-	gw.core = opts.Core
-	gw.log, err = api.NewEmersyxLogger(opts.LogWriter, opts.Identifier, opts.LogLevel)
-	if err != nil {
-		return nil, err
-	}
 
 	// apply the extended options from the config file
 	config := new(ircGatewayConfig)

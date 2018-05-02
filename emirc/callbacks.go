@@ -25,7 +25,7 @@ func newMessage(id string, line *goirc.Line) ircapi.IRCMessage {
 func channelCallback(gw *ircGateway) func(*goirc.Conn, *goirc.Line) {
 	return func(conn *goirc.Conn, line *goirc.Line) {
 		go func() {
-			gw.messages <- newMessage(gw.identifier, line)
+			gw.messages <- newMessage(gw.Identifier, line)
 		}()
 	}
 }
@@ -34,16 +34,16 @@ func channelCallback(gw *ircGateway) func(*goirc.Conn, *goirc.Line) {
 // into a ircapi.Message object and logs the contents.
 func loggingCallback(gw *ircGateway) func(*goirc.Conn, *goirc.Line) {
 	return func(conn *goirc.Conn, line *goirc.Line) {
-		m := newMessage(gw.identifier, line)
-		gw.log.Debugf("New message:\n")
-		gw.log.Debugf("Source      %s\n", m.Source)
-		gw.log.Debugf("Raw         %s\n", m.Raw)
-		gw.log.Debugf("Command     %s\n", m.Command)
-		gw.log.Debugf("Origin      %s\n", m.Origin)
-		gw.log.Debugf("Parameters:\n")
+		m := newMessage(gw.Identifier, line)
+		gw.Log.Debugf("New message:\n")
+		gw.Log.Debugf("Source      %s\n", m.Source)
+		gw.Log.Debugf("Raw         %s\n", m.Raw)
+		gw.Log.Debugf("Command     %s\n", m.Command)
+		gw.Log.Debugf("Origin      %s\n", m.Origin)
+		gw.Log.Debugf("Parameters:\n")
 		for i, p := range m.Parameters {
-			gw.log.Debugf("%d. %s\n", i, p)
+			gw.Log.Debugf("%d. %s\n", i, p)
 		}
-		gw.log.Debugf("-----\n")
+		gw.Log.Debugf("-----\n")
 	}
 }

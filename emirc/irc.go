@@ -8,7 +8,7 @@ import (
 
 // GetIdentifier returns the identifier of this receptor.
 func (gw *ircGateway) GetIdentifier() string {
-	return gw.identifier
+	return gw.Identifier
 }
 
 // GetEventsOutChannel returns the api.Event channel through which emersyx events are pushed by this gateway.
@@ -20,19 +20,19 @@ func (gw *ircGateway) GetEventsOutChannel() <-chan api.Event {
 // connects to the server without errors, then nil is returned. Otherwise an error with the appropriate message is
 // returned.
 func (gw *ircGateway) connect() error {
-	gw.log.Debugln("connecting to the server")
+	gw.Log.Debugln("connecting to the server")
 	err := gw.api.Connect()
 	for gw.api.Connected() != true {
 		time.Sleep(time.Duration(500) * time.Millisecond)
 	}
-	gw.log.Debugln("connected to the server")
+	gw.Log.Debugln("connected to the server")
 	return err
 }
 
 // Quit disconnects the IRC gateway from the server. If the gateway disconnects from the server without errors, then nil
 // is returned. Otherwise an error with the appropriate message is returned.
 func (gw *ircGateway) Quit() error {
-	gw.log.Debugln("quitting to the server")
+	gw.Log.Debugln("quitting to the server")
 	err := gw.api.Close()
 	return err
 }
@@ -42,7 +42,7 @@ func (gw *ircGateway) Quit() error {
 // returned.
 func (gw *ircGateway) Join(ch string) error {
 	if gw.api.Connected() {
-		gw.log.Debugf("joining the \"%s\" channel\n", ch)
+		gw.Log.Debugf("joining the \"%s\" channel\n", ch)
 		gw.api.Join(ch)
 		return nil
 	}
@@ -53,7 +53,7 @@ func (gw *ircGateway) Join(ch string) error {
 // argument.
 func (gw *ircGateway) Privmsg(to, msg string) error {
 	if gw.api.Connected() {
-		gw.log.Debugf("sending a PRIVMSG to \"%s\"\n", to)
+		gw.Log.Debugf("sending a PRIVMSG to \"%s\"\n", to)
 		gw.api.Privmsg(to, msg)
 		return nil
 	}
