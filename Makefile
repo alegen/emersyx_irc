@@ -4,7 +4,7 @@ emersyx-irc.so:
 .PHONY: test
 test: emersyx-irc.so
 	@echo "Running the tests with gofmt..."
-	@test -z $(shell gofmt -s -l emirc/*.go)
+	@test -z $(shell gofmt -s -l internal/irc/*.go)
 	@echo "Running the tests with go vet..."
 	@go vet ./...
 	@echo "Running the tests with golint..."
