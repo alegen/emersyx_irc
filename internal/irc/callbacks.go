@@ -1,7 +1,7 @@
 package main
 
 import (
-	"emersyx.net/emersyx/pkg/api/irc"
+	"emersyx.net/common/pkg/api/irc"
 	goirc "github.com/fluffle/goirc/client"
 )
 
