@@ -1,8 +1,9 @@
 package main
 
 import (
-	"emersyx.net/emersyx/api"
-	"emersyx.net/emersyx/api/ircapi"
+	"emersyx.net/emersyx/pkg/api"
+	"emersyx.net/emersyx/pkg/api/irc"
+	"emersyx.net/emersyx/pkg/log"
 	"flag"
 	"fmt"
 	"os"
@@ -10,7 +11,6 @@ import (
 	"time"
 )
 
-var nick = flag.String("nick", "", "IRC gw nick used during testing")
 var channel = flag.String("channel", "", "IRC channel to join during testing")
 var sendto = flag.String("sendto", "", "IRC user to send message to during testing")
 var conffile = flag.String("conffile", "", "path to toml configuration file")
@@ -22,7 +22,7 @@ func TestConnection(t *testing.T) {
 			Identifier: "emirc-test",
 			ConfigPath: *conffile,
 			LogWriter:  os.Stdout,
-			LogLevel:   api.ELDebug,
+			LogLevel:   log.ELDebug,
 		},
 	)
 	if err != nil {
@@ -56,7 +56,7 @@ func TestConnection(t *testing.T) {
 				return
 			}
 			// print all the contents of the Message
-			cm := m.(ircapi.IRCMessage)
+			cm := m.(irc.Message)
 			fmt.Printf("-----\n")
 			fmt.Printf("Source      %s\n", cm.Source)
 			fmt.Printf("Raw         %s\n", cm.Raw)

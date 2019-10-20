@@ -1,18 +1,11 @@
-emirc.so: goget
-	@go build -buildmode=plugin -o emirc.so emirc/*
-
-.PHONY: goget
-goget:
-	@go get emersyx.net/emersyx/api
-	@go get github.com/fluffle/goirc/client
-	@go get github.com/fluffle/goirc/logging
-	@go get github.com/fluffle/goirc/state
-	@go get github.com/golang/lint/golint
-	@go get github.com/BurntSushi/toml
+emirc.so:
+	@go build -buildmode=plugin -o irc.so internal/irc/*
 
 .PHONY: test
 test: emirc.so
-	@echo "Running the tests with gofmt, go vet and golint..."
+	@echo "Running the tests with gofmt..."
 	@test -z $(shell gofmt -s -l emirc/*.go)
+	@echo "Running the tests with go vet..."
 	@go vet ./...
+	@echo "Running the tests with golint..."
 	@golint -set_exit_status $(shell go list ./...)

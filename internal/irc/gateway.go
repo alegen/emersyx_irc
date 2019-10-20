@@ -1,7 +1,7 @@
 package main
 
 import (
-	"emersyx.net/emersyx/api"
+	"emersyx.net/emersyx/pkg/api"
 	"github.com/BurntSushi/toml"
 	goirc "github.com/fluffle/goirc/client"
 )
