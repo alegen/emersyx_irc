@@ -6,9 +6,9 @@ import (
 	goirc "github.com/fluffle/goirc/client"
 )
 
-// The ircGateway struct defines the implementation of an IRC receptor and resource. The struct implements the
-// api.IRCGateway and api.Receptor interfaces.
-type ircGateway struct {
+// gateway is the type which defines an irc.Gateway implementation, namely an IRC resource and receptor for the emersyx
+// platform.
+type gateway struct {
 	api.PeripheralBase
 	api      *goirc.Conn
 	config   *goirc.Config
@@ -19,8 +19,8 @@ type ircGateway struct {
 func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 	var err error
 
-	// create a new ircGateway and initialize the base
-	gw := new(ircGateway)
+	// create a new gateway and initialize the base
+	gw := new(gateway)
 	gw.InitializeBase(opts)
 
 	// create the messages channel
@@ -40,14 +40,14 @@ func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 	gw.config.NewNick = func(n string) string { return n + "^" }
 
 	// apply the extended options from the config file
-	config := new(ircGatewayConfig)
-	if _, err = toml.DecodeFile(opts.ConfigPath, config); err != nil {
+	c := new(config)
+	if _, err = toml.DecodeFile(opts.ConfigPath, c); err != nil {
 		return nil, err
 	}
-	if err = config.validate(); err != nil {
+	if err = c.validate(); err != nil {
 		return nil, err
 	}
-	config.apply(gw)
+	c.apply(gw)
 
 	// create the underlying Conn object
 	gw.api = goirc.Client(gw.config)
@@ -62,7 +62,7 @@ func NewPeripheral(opts api.PeripheralOptions) (api.Peripheral, error) {
 }
 
 // initCallbacks sets the callback functions for the internally used goirc library.
-func (gw *ircGateway) initCallbacks() {
+func (gw *gateway) initCallbacks() {
 	gw.api.HandleFunc(goirc.PRIVMSG, channelCallback(gw))
 	gw.api.HandleFunc(goirc.JOIN, channelCallback(gw))
 	gw.api.HandleFunc(goirc.QUIT, channelCallback(gw))

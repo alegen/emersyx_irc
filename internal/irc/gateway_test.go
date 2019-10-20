@@ -16,7 +16,7 @@ var sendto = flag.String("sendto", "", "IRC user to send message to during testi
 var conffile = flag.String("conffile", "", "path to toml configuration file")
 
 func TestConnection(t *testing.T) {
-	// create a new ircGateway
+	// create a new gateway
 	peripheral, err := NewPeripheral(
 		api.PeripheralOptions{
 			Identifier: "emirc-test",
@@ -31,7 +31,7 @@ func TestConnection(t *testing.T) {
 		return
 	}
 
-	gw := peripheral.(*ircGateway)
+	gw := peripheral.(*gateway)
 
 	// if we reached this point, we will have to quit the server at the end
 	defer gw.Quit()
