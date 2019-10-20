@@ -1,4 +1,4 @@
-# This is an example configuration file for an emirc.IRCGateway instance.
+# This is an example configuration file for an irc.Gateway instance.
 nick = "emersyx"
 ident = "emersyx"
 name = "emersyx"
