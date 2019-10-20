@@ -1,8 +1,8 @@
-emirc.so:
-	@go build -buildmode=plugin -o irc.so internal/irc/*
+emersyx-irc.so:
+	@go build -buildmode=plugin -o emersyx-irc.so internal/irc/*
 
 .PHONY: test
-test: emirc.so
+test: emersyx-irc.so
 	@echo "Running the tests with gofmt..."
 	@test -z $(shell gofmt -s -l emirc/*.go)
 	@echo "Running the tests with go vet..."
